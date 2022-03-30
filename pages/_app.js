@@ -34,6 +34,9 @@ function MyApp({ Component, pageProps }) {
 
   const logout = async (href) => {
     Cookie.remove("token");
+    Cookie.remove("next-auth.session-token");
+    Cookie.remove("next-auth.callback-url");
+    Cookie.remove("next-auth.csrf-token");
     setUser_id(null);
     signOut({ redirect: false });
     await router.push(

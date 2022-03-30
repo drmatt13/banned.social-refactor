@@ -12,7 +12,7 @@ export default async (req, res) => {
   // --------
 
   // sign user_id into a token
-  const token = jwt.sign({ user_id: "123456789" }, process.env.BEARER_SECRET);
+  const token = jwt.sign({ user_id: "123456789" }, process.env.TOKEN_SECRET);
 
   return res.json({
     success: true,

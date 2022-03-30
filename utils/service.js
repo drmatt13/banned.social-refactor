@@ -1,5 +1,4 @@
 import axios from "axios";
-import Cookie from "js-cookie";
 
 export default async (service, data = {}) => {
   try {
@@ -14,6 +13,6 @@ export default async (service, data = {}) => {
     );
     return res.data;
   } catch (error) {
-    return { success: false };
+    return { error: "Server Error", success: false };
   }
 };

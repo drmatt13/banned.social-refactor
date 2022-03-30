@@ -6,7 +6,15 @@ import jwt from "jsonwebtoken";
 // import User from "../../../models/User";
 
 export default async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { email, password, user_id, csrfToken } = req.body;
+
+  // if no csrf token, return success: false
+
+  // get user
+  // user_id = "123456789";
+
+  // if no user found, create one
+  // create user
 
   // sign user_id into a token
   const token = jwt.sign({ user_id: "123456789" }, process.env.TOKEN_SECRET);

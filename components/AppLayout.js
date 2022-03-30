@@ -2,23 +2,22 @@ import { useContext } from "react";
 
 // components
 import Loading from "../components/Loading";
+import Navbar from "../components/Navbar";
 
 // context
 import _appContext from "../context/_appContext";
 
 const Layout = ({ children }) => {
-  const { loading } = useContext(_appContext);
+  const { loading, user_id } = useContext(_appContext);
 
   return (
-    <div className="h-screen w-screen bg-black">
+    <div className="relative h-screen w-screen flex flex-col justify-start bg-black overflow-y-auto">
       {loading ? (
-        <div className="h-full w-full flex justify-center items-center">
-          <Loading />
-        </div>
+        <Loading />
       ) : (
         <>
-          {/* <div>NAVBAR</div> */}
-          <>{children}</>
+          {user_id && <Navbar />}
+          <div className="flex-1">{children}</div>
         </>
       )}
     </div>

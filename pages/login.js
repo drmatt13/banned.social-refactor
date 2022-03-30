@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useLayoutEffect } from "react";
 import Link from "next/link";
 import Cookie from "js-cookie";
 
@@ -32,22 +32,29 @@ const Login = () => {
   }, [user_id]);
 
   return (
-    <div className="h-screen w-screen flex flex-col justify-center items-center">
+    <div className="h-full w-full flex flex-col justify-center items-center">
       {loading ? (
         <Loading />
       ) : (
-        <div className="flex flex-col items-center w-60 px-4 pt-4 pb-2 bg-gray-100/75 rounded-lg animate-fade-in">
-          {loginMethod === 1 && <DefaultLogin setLoading={setLoading} />}
-          {loginMethod === 2 && <AltLogin setLoading={setLoading} />}
-          <div
-            className="select-none mb-2 py-2 w-full flex justify-center items-center rounded border border-gray-900 shadow cursor-pointer bg-black hover:bg-gray-800 text-gray-200 hover:text-white transition-all hover:shadow-lg"
-            onClick={toggleLoginMethod}
-          >
-            {loginMethod === 1 ? "alternate login" : "back"}
+        <div className="animate-fade-in flex flex-col justify-center items-center">
+          <div className="flex flex-col items-center w-60 px-4 pt-4 pb-2 bg-gray-100/75 rounded-lg">
+            {loginMethod === 1 && <DefaultLogin setLoading={setLoading} />}
+            {loginMethod === 2 && <AltLogin setLoading={setLoading} />}
+            <div
+              className="select-none mb-2 py-2 w-full flex justify-center items-center rounded border border-gray-900 shadow cursor-pointer bg-black hover:bg-gray-800 text-gray-200 hover:text-white transition-all hover:shadow-lg"
+              onClick={toggleLoginMethod}
+            >
+              {loginMethod === 1 ? "alternate login" : "back"}
+            </div>
+            <Link href="/register">
+              <a className="mb-2 text-blue-500 hover:underline hover:text-purple-500">
+                Sign Up Today
+              </a>
+            </Link>
           </div>
-          <Link href="/register">
-            <a className="mb-2 text-blue-500 hover:underline hover:text-purple-500">
-              Sign Up Today
+          <Link href="/unprotected-test">
+            <a className="mt-6 text-blue-500 hover:underline hover:text-purple-500">
+              unprotected page link
             </a>
           </Link>
         </div>
@@ -122,34 +129,62 @@ const DefaultLogin = ({ setLoading }) => {
 
 import { signIn } from "next-auth/react";
 
-const AltLogin = ({ setLoading }) => {
+const AltLogin = () => {
   const [expires, setExpires] = useState(true);
 
-  const test = async () => {
-    setLoading(true);
-    const data = await service("github");
-    console.log(data);
-    setLoading(false);
-  };
+  const { router } = useContext(_appContext);
 
   return (
     <div className="w-full animate-fade-in">
-      <div className="select-none mb-2 py-2 w-full flex justify-center items-center rounded border border-blue-600/60 shadow cursor-pointer bg-blue-600 hover:bg-blue-500 text-gray-200 hover:text-white transition-all hover:shadow-lg">
+      <div
+        onClick={() =>
+          signIn("facebook", {
+            callbackUrl: `/oauth?provider=facebook${
+              router.query.redirect ? `&redirect=${router.query.redirect}` : ""
+            }`,
+          })
+        }
+        className="select-none mb-2 py-2 w-full flex justify-center items-center rounded border border-blue-600/60 shadow cursor-pointer bg-blue-600 hover:bg-blue-500 text-gray-200 hover:text-white transition-all hover:shadow-lg"
+      >
         <i className="devicon-facebook-plain mr-2" />
         facebook login
       </div>
-      <div className="select-none mb-2 py-2 w-full flex justify-center items-center rounded border border-red-500/50 shadow cursor-pointer bg-red-500 hover:bg-red-500/80 text-gray-200 hover:text-white transition-all hover:shadow-lg">
+      <div
+        onClick={() =>
+          signIn("apple", {
+            callbackUrl: `/oauth?provider=apple${
+              router.query.redirect ? `&redirect=${router.query.redirect}` : ""
+            }`,
+          })
+        }
+        className="select-none mb-2 py-2 w-full flex justify-center items-center rounded border border-red-500/50 shadow cursor-pointer bg-red-500 hover:bg-red-500/80 text-gray-200 hover:text-white transition-all hover:shadow-lg"
+      >
         <i className="devicon-apple-original mr-2" />
         apple login
       </div>
       <div
-        onClick={() => signIn("github", { callbackUrl: "/oauth?github" })}
+        onClick={() =>
+          signIn("github", {
+            callbackUrl: `/oauth?provider=github${
+              router.query.redirect ? `&redirect=${router.query.redirect}` : ""
+            }`,
+          })
+        }
         className="select-none mb-2 py-2 w-full flex justify-center items-center rounded border border-gray-900 shadow cursor-pointer bg-black hover:bg-gray-800 text-gray-200 hover:text-white transition-all hover:shadow-lg"
       >
         <i className="devicon-github-original mr-2 text-white" />
         github login
       </div>
-      <div className="select-none mb-2 py-2 w-full flex justify-center items-center rounded border border-gray-300 shadow cursor-pointer bg-white/95 hover:bg-white text-gray-900 hover:text-black transition-all hover:shadow-lg">
+      <div
+        onClick={() =>
+          signIn("google", {
+            callbackUrl: `/oauth?provider=google${
+              router.query.redirect ? `&redirect=${router.query.redirect}` : ""
+            }`,
+          })
+        }
+        className="select-none mb-2 py-2 w-full flex justify-center items-center rounded border border-gray-300 shadow cursor-pointer bg-white/95 hover:bg-white text-gray-900 hover:text-black transition-all hover:shadow-lg"
+      >
         <img
           className="h-4 mr-2"
           src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
