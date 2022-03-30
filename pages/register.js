@@ -53,46 +53,52 @@ const Register = () => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="flex flex-col items-center w-60 p-4 bg-gray-100/75 rounded-lg animate-fade-in">
-          <div className="flex flex-col mt-2 w-52">
-            <input
-              className="border border-gray-400 mb-2 p-2 rounded"
-              type="text"
-              placeholder="first name"
-            />
-            <input
-              className="border border-gray-400 mb-2 p-2 rounded"
-              type="text"
-              placeholder="last name"
-            />
-            <input
-              className="border border-gray-400 mb-2 p-2 rounded"
-              type="text"
-              placeholder="email"
-            />
-            <input
-              className="border border-gray-400 mb-2 p-2 rounded"
-              type="text"
-              placeholder="password"
-            />
-            <input
-              className="border border-gray-400 mb-2 p-2 rounded"
-              type="text"
-              placeholder="confirm password"
-            />
+        <>
+          <div className="text-white">forms not required</div>
+          <div className="text-white mb-4">
+            register returns encrypted auth token
           </div>
-          <div
-            className="select-none mb-2 py-2 px-10 w-full flex justify-center items-center rounded border border-sky-500/75 shadow cursor-pointer bg-sky-500 hover:bg-sky-400 text-gray-200 hover:text-white transition-colors"
-            onClick={register}
-          >
-            Register
+          <div className="flex flex-col items-center w-60 p-4 bg-gray-100/75 rounded-lg animate-fade-in">
+            <div className="flex flex-col mt-2 w-52">
+              <input
+                className="border border-gray-400 mb-2 p-2 rounded"
+                type="text"
+                placeholder="first name"
+              />
+              <input
+                className="border border-gray-400 mb-2 p-2 rounded"
+                type="text"
+                placeholder="last name"
+              />
+              <input
+                className="border border-gray-400 mb-2 p-2 rounded"
+                type="text"
+                placeholder="email"
+              />
+              <input
+                className="border border-gray-400 mb-2 p-2 rounded"
+                type="text"
+                placeholder="password"
+              />
+              <input
+                className="border border-gray-400 mb-2 p-2 rounded"
+                type="text"
+                placeholder="confirm password"
+              />
+            </div>
+            <div
+              className="select-none mb-2 py-2 px-10 w-full flex justify-center items-center rounded border border-sky-500/75 shadow cursor-pointer bg-sky-500 hover:bg-sky-400 text-gray-200 hover:text-white transition-colors"
+              onClick={register}
+            >
+              Register
+            </div>
+            <Link href="/login">
+              <a className="text-blue-500 hover:underline hover:text-purple-500">
+                Return to login
+              </a>
+            </Link>
           </div>
-          <Link href="/login">
-            <a className="text-blue-500 hover:underline hover:text-purple-500">
-              Return to login
-            </a>
-          </Link>
-        </div>
+        </>
       )}
     </div>
   );

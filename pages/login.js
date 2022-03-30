@@ -37,6 +37,19 @@ const Login = () => {
         <Loading />
       ) : (
         <div className="animate-fade-in flex flex-col justify-center items-center">
+          {loginMethod === 1 && (
+            <>
+              <div className="text-white">forms not required</div>
+              <div className="text-white mb-4">
+                login returns encrypted auth token
+              </div>
+            </>
+          )}
+          {loginMethod === 2 && (
+            <div className="text-white mb-4">
+              only github OAuth configured for this template app
+            </div>
+          )}
           <div className="flex flex-col items-center w-60 px-4 pt-4 pb-2 bg-gray-100/75 rounded-lg">
             {loginMethod === 1 && <DefaultLogin setLoading={setLoading} />}
             {loginMethod === 2 && <AltLogin setLoading={setLoading} />}
