@@ -106,8 +106,8 @@ function MyApp({ Component, pageProps }) {
         <meta property="og:title" content="" />
         <meta property="og:description" content="" />
         <meta
-          property="https://next-tailwind-userauth-boilerplate.vercel.app/og_image.webp"
-          content=""
+          property="og:image"
+          content="https://next-tailwind-userauth-boilerplate.vercel.app/og_image.webp"
         />
       </Head>
       <SessionProvider session={pageProps.session}>
