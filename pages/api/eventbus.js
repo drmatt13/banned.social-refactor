@@ -21,9 +21,9 @@ export default async (req, res) => {
   // if no standard token, check for csrf token
   if (!body.user_id) {
     try {
-      body?.data?.csrfToken = await getToken({ req });
+      body.data.csrfToken = await getToken({ req });
     } catch (error) {
-      body?.data?.csrfToken = null;
+      body.data.csrfToken = null;
     }
   }
 
@@ -81,7 +81,7 @@ export default async (req, res) => {
       case "oauth":
         req = await axios.post(
           `${process.env.URL}/api/services/oauth`,
-          body.data,
+          body.data
         );
         break;
 
