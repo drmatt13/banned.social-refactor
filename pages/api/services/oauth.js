@@ -11,7 +11,7 @@ export default connectDB(async (req, res) => {
       token: req.body.sessionToken,
       secret: process.env.NEXTAUTH_SECRET,
     });
-
+    console.log(decodedSessionToken);
     // check if email exists in database
     let user = await User.findOne({ email: decodedSessionToken.email });
     if (!user) {
