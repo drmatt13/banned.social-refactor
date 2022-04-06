@@ -49,6 +49,7 @@ const Oauth = () => {
       session !== null &&
       ["github", "google", "facebook", "apple"].includes(router.query.provider)
     ) {
+      console.log(session);
       login();
     }
   }, [processing, setProcessing, session, router]);

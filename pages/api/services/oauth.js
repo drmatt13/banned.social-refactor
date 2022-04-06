@@ -16,7 +16,6 @@ export default connectDB(async (req, res) => {
     let user = await User.findOne({ email: decodedSessionToken.email });
     if (!user) {
       // if email does not exist, create user
-      console.log(decodedSessionToken.email);
       user = await User.create({
         firstName: "undefined",
         lastName: "undefined",
