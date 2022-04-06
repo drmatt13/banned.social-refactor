@@ -5,16 +5,16 @@ import Cookie from "js-cookie";
 import service from "../utils/service";
 
 const useCredentials = () => {
-  const [user_id, setUser_id] = useState();
+  const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
 
   const checkCredentials = async () => {
     // check if no token cookie exists
     if (!Cookie.get("token")) return setLoading(false);
-    // check if token cookie is valid and update user_id
+    // check if token cookie is valid and update current user
     try {
       const data = await service("get user");
-      if (data.user) setUser_id(data.user.user_id);
+      if (data.user) setUser(data.user);
     } catch (error) {
       console.log("invalid token".bold.red);
     }
@@ -23,7 +23,7 @@ const useCredentials = () => {
 
   useEffect(checkCredentials, []);
 
-  return { loading, user_id, setUser_id };
+  return { loading, user, setUser };
 };
 
 export default useCredentials;

@@ -6,12 +6,12 @@ import jwt from "jsonwebtoken";
 // import User from "../../../models/User";
 
 export default async (req, res) => {
-  let { user_id, profile_id } = req.body;
+  let { _id, profile_id } = req.body;
 
   // get user
-  user_id = "123456789";
+  const user = { _id: "123456789" };
 
-  return res.json({ success: true, user: { user_id } });
+  return res.json({ success: true, user });
 };
 
 // export default connectDB(async (req, res) => {

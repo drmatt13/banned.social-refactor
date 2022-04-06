@@ -1,35 +1,23 @@
 import colors from "colors";
 import axios from "axios";
 import jwt from "jsonwebtoken";
-import { getToken } from "next-auth/jwt";
-
-// utils
-import connectDB from "../../utils/connectDB";
+import { decode } from "next-auth/jwt";
 
 export default async (req, res) => {
   const { body, cookies } = req;
 
-  // verify validity of the token in the cookie and return the user_id
+  // verify validity of the token in the cookie and return the users _id
   let verifiedToken;
   try {
     verifiedToken = jwt.verify(cookies.token, process.env.TOKEN_SECRET);
-    body.user_id = verifiedToken.user_id;
+    body._id = verifiedToken._id;
   } catch (error) {
-    body.user_id = null;
-  }
-
-  // if no standard token, check for csrf token
-  if (!body.user_id) {
-    try {
-      body.data.csrfToken = await getToken({ req });
-    } catch (error) {
-      body.data.csrfToken = null;
-    }
+    body._id = null;
   }
 
   // log request
-  let token_id = body.user_id
-    ? body.user_id
+  let token_id = body._id
+    ? body._id
     : cookies.token
     ? "Invalid Token"
     : "No Token";
@@ -79,10 +67,9 @@ export default async (req, res) => {
       // returns jwt
       // { email, password, csrfToken }
       case "oauth":
-        req = await axios.post(
-          `${process.env.URL}/api/services/oauth`,
-          body.data
-        );
+        req = await axios.post(`${process.env.URL}/api/services/oauth`, {
+          sessionToken: cookies["next-auth.session-token"],
+        });
         break;
 
       // Register user

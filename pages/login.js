@@ -15,7 +15,7 @@ import service from "../utils/service";
 // ..
 
 const Login = () => {
-  const { router, user_id } = useContext(_appContext);
+  const { router, user } = useContext(_appContext);
 
   const [loading, setLoading] = useState(false);
   const [loginMethod, setLoginMethod] = useState(1);
@@ -24,12 +24,12 @@ const Login = () => {
     setLoginMethod(loginMethod === 1 ? 2 : 1);
   };
 
-  // if uder_id exists or is updated, redirect to home
+  // if user exists or is updated, redirect to home
   useEffect(() => {
-    if (user_id) {
+    if (user) {
       router.push("/");
     }
-  }, [user_id]);
+  }, [user]);
 
   return (
     <div className="h-full w-full flex flex-col justify-center items-center">
@@ -37,19 +37,6 @@ const Login = () => {
         <Loading />
       ) : (
         <div className="animate-fade-in flex flex-col justify-center items-center">
-          {loginMethod === 1 && (
-            <>
-              <div className="text-white">forms not required</div>
-              <div className="text-white mb-4">
-                login returns encrypted auth token
-              </div>
-            </>
-          )}
-          {loginMethod === 2 && (
-            <div className="text-white mb-4">
-              only github OAuth configured for this template app
-            </div>
-          )}
           <div className="flex flex-col items-center w-60 px-4 pt-4 pb-2 bg-gray-100/75 rounded-lg">
             {loginMethod === 1 && <DefaultLogin setLoading={setLoading} />}
             {loginMethod === 2 && <AltLogin setLoading={setLoading} />}
@@ -79,45 +66,59 @@ const Login = () => {
 export default Login;
 
 const DefaultLogin = ({ setLoading }) => {
-  const { setUser_id } = useContext(_appContext);
+  const { setUser } = useContext(_appContext);
 
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [expires, setExpires] = useState(true);
 
-  const login = async () => {
+  const login = async (e) => {
+    e.preventDefault();
     setLoading(true);
     const data = await service("login", {
-      email,
+      username,
       password,
     });
-    if (data.user && data.token) {
-      Cookie.set("token", data.token, {
-        expires: expires ? undefined : 3600,
-      });
-      setUser_id(data.user.user_id);
+    const { user, token, success } = data;
+    if (success) {
+      if (user && token) {
+        Cookie.set("token", token, {
+          expires: expires ? undefined : 3600,
+        });
+        setUser(user);
+      } else {
+        alert("login failed");
+      }
     } else {
       alert("login failed");
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   return (
-    <div className="flex flex-col items-center animate-fade-in">
+    <form
+      onSubmit={login}
+      className="flex flex-col items-center animate-fade-in"
+    >
       <div className="flex flex-col w-52 mt-2">
         <input
           className="border border-gray-400 mb-2 p-2 rounded"
           type="text"
-          placeholder="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          placeholder="username or email"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required={true}
+          autoComplete="email"
         />
         <input
           className="border border-gray-400 mb-3 p-2 rounded"
-          type="text"
+          type="password"
           placeholder="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required={true}
+          minLength={6}
+          autoComplete="current-password"
         />
       </div>
       <div className="w-full mb-3 flex items-center justify-center">
@@ -130,13 +131,12 @@ const DefaultLogin = ({ setLoading }) => {
         />
         <label htmlFor="expires">Stay logged in?</label>
       </div>
-      <div
+      <input
+        type="submit"
         className="select-none mb-1 py-2 w-full flex justify-center items-center rounded border border-sky-500/75 shadow cursor-pointer bg-sky-500 hover:bg-sky-400 text-gray-200 hover:text-white transition-all hover:shadow-lg"
-        onClick={login}
-      >
-        login
-      </div>
-    </div>
+        value="login"
+      />
+    </form>
   );
 };
 
@@ -152,7 +152,9 @@ const AltLogin = () => {
       <div
         onClick={() =>
           signIn("facebook", {
-            callbackUrl: `/oauth?provider=facebook${
+            callbackUrl: `/oauth?provider=facebook&expires=${
+              expires ? "true" : "false"
+            }${
               router.query.redirect ? `&redirect=${router.query.redirect}` : ""
             }`,
           })
@@ -165,7 +167,9 @@ const AltLogin = () => {
       <div
         onClick={() =>
           signIn("apple", {
-            callbackUrl: `/oauth?provider=apple${
+            callbackUrl: `/oauth?provider=apple&expires=${
+              expires ? "true" : "false"
+            }${
               router.query.redirect ? `&redirect=${router.query.redirect}` : ""
             }`,
           })
@@ -178,7 +182,9 @@ const AltLogin = () => {
       <div
         onClick={() =>
           signIn("github", {
-            callbackUrl: `/oauth?provider=github${
+            callbackUrl: `/oauth?provider=github&expires=${
+              expires ? "true" : "false"
+            }${
               router.query.redirect ? `&redirect=${router.query.redirect}` : ""
             }`,
           })
@@ -191,7 +197,9 @@ const AltLogin = () => {
       <div
         onClick={() =>
           signIn("google", {
-            callbackUrl: `/oauth?provider=google${
+            callbackUrl: `/oauth?provider=google&expires=${
+              expires ? "true" : "false"
+            }${
               router.query.redirect ? `&redirect=${router.query.redirect}` : ""
             }`,
           })

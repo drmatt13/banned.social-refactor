@@ -19,7 +19,7 @@ import "../styles/globals.scss";
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
-  const { loading, user_id, setUser_id } = useCredentials();
+  const { loading, user, setUser } = useCredentials();
 
   // tailwind darkmode initial state
   const [darkMode, setDarkMode] = useState(false);
@@ -37,7 +37,7 @@ function MyApp({ Component, pageProps }) {
     Cookie.remove("next-auth.session-token");
     Cookie.remove("next-auth.callback-url");
     Cookie.remove("next-auth.csrf-token");
-    setUser_id(null);
+    setUser(null);
     signOut({ redirect: false });
     await router.push(
       `/login${
@@ -119,8 +119,8 @@ function MyApp({ Component, pageProps }) {
             logout,
             mobile,
             router,
-            user_id,
-            setUser_id,
+            user,
+            setUser,
           }}
         >
           <AppLayout>

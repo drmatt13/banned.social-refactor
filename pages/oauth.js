@@ -13,17 +13,22 @@ import service from "../utils/service";
 
 const Oauth = () => {
   const { data: session } = useSession();
-  const { logout, router, user_id, setUser_id } = useContext(_appContext);
+  const { logout, router, user, setUser } = useContext(_appContext);
   const [processing, setProcessing] = useState(false);
 
   const login = async () => {
-    const data = await service("oauth", {
-      email: "",
-      password: "",
-    });
-    if (data.user && data.token) {
-      Cookie.set("token", data.token);
-      setUser_id(data.user.user_id);
+    const data = await service("oauth");
+    const { user, token, success } = data;
+    if (success) {
+      if (user && token) {
+        Cookie.set("token", data.token, {
+          expires: router.query.expires ? undefined : 3600,
+        });
+        setUser(user);
+      } else {
+        alert("login failed");
+        logout();
+      }
     } else {
       alert("login failed");
       logout();
@@ -32,10 +37,10 @@ const Oauth = () => {
 
   // if user_id exists or is updated, redirect to home
   useEffect(() => {
-    if (user_id && router) {
+    if (user && router) {
       router.push(`/${router.query.redirect ? router.query.redirect : ""}`);
     }
-  }, [user_id, router]);
+  }, [user, router]);
 
   useEffect(() => {
     if (
@@ -44,7 +49,6 @@ const Oauth = () => {
       session !== null &&
       ["github", "google", "facebook", "apple"].includes(router.query.provider)
     ) {
-      setProcessing(true);
       login();
     }
   }, [processing, setProcessing, session, router]);

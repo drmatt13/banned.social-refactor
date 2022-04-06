@@ -4,15 +4,23 @@ const mongoose = require("mongoose");
 const Schema = new mongoose.Schema({
   firstName: {
     type: String,
-    required: [true, "Please add a first name"],
+    // required: [true, "Please add a first name"],
     trim: true,
-    maxlength: [25, "First name can not be more then 20 characters"],
+    maxlength: [25, "First name can not be more then 25 characters"],
   },
   lastName: {
     type: String,
-    required: [true, "Please add a last name"],
+    // required: [true, "Please add a last name"],
     trim: true,
-    maxlength: [25, "Last name can not be more then 20 characters"],
+    maxlength: [25, "Last name can not be more then 25 characters"],
+  },
+  username: {
+    type: String,
+    required: [true, "Please add a username"],
+    unique: true,
+    trim: true,
+    maxlength: [25, "Username can not be more then 25 characters"],
+    minlength: [3, "Username can not be less then 3 characters"],
   },
   email: {
     type: String,
@@ -27,16 +35,17 @@ const Schema = new mongoose.Schema({
     unique: false,
     trim: true,
     maxlength: [255, "Password can not be more then 255 characters"],
+    minlength: [6, "Password can not be less then 6 characters"],
     select: false,
   },
-  profileAvatar: {
-    type: Number,
-    default: 0,
-  },
-  profileImage: {
-    type: String,
-    default: null,
-  },
+  // profileAvatar: {
+  //   type: Number,
+  //   default: 0,
+  // },
+  // profileImage: {
+  //   type: String,
+  //   default: null,
+  // },
   admin: {
     type: Boolean,
     default: false,
@@ -48,12 +57,13 @@ const Schema = new mongoose.Schema({
 });
 
 Schema.pre("save", function (next) {
-  this.firstName =
-    this.firstName.charAt(0).toUpperCase() +
-    this.firstName.slice(1).toLowerCase();
-  this.lastName =
-    this.lastName.charAt(0).toUpperCase() +
-    this.lastName.slice(1).toLowerCase();
+  this.email = this.email.toLowerCase();
+  if (this.firstName) {
+    this.firstName = this.firstName.toLowerCase();
+  }
+  if (this.lastName) {
+    this.lastName = this.lastName.toLowerCase();
+  }
   next();
 });
 
