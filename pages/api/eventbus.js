@@ -70,7 +70,7 @@ export default async (req, res) => {
         req = await axios.post(`${process.env.URL}/api/services/oauth`, {
           sessionToken:
             // cookies["next-auth.session-token"] ||
-            cookies["__Host-next-auth.csrf-token"],
+            cookies["__Secure-next-auth.session-token"],
         });
         break;
 
