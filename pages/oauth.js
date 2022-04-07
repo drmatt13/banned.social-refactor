@@ -19,6 +19,7 @@ const Oauth = () => {
   const login = async () => {
     const data = await service("oauth");
     const { user, token, success } = data;
+    console.log(data || "no data");
     if (success) {
       if (user && token) {
         Cookie.set("token", data.token, {
