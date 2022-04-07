@@ -7,10 +7,10 @@ import User from "../../../models/User";
 
 export default connectDB(async (req, res) => {
   try {
-    const decodedSessionToken = await decode({
-      token: req.body.sessionToken,
-      secret: process.env.NEXTAUTH_SECRET,
-    });
+    // const decodedSessionToken = await decode({
+    //   token: req.body.sessionToken,
+    //   secret: process.env.NEXTAUTH_SECRET,
+    // });
     // console.log(decodedSessionToken);
     // // check if email exists in database
     // let user = await User.findOne({ email: decodedSessionToken.email });
@@ -34,7 +34,7 @@ export default connectDB(async (req, res) => {
     // });
     return res.json({
       success: true,
-      test: decodedSessionToken,
+      sessionToken: req.body.sessionToken,
     });
   } catch (err) {
     console.error(err.message);
