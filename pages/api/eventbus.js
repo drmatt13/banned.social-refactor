@@ -68,7 +68,7 @@ export default async (req, res) => {
       // { email, password, csrfToken }
       case "oauth":
         req = await axios.post(`${process.env.URL}/api/services/oauth`, {
-          sessionToken: cookies["next-auth.session-token"],
+          sessionToken: cookies,
         });
         break;
 
