@@ -28,8 +28,8 @@ export default connectDB(async (req, res) => {
         // update user
         user = tempUser;
         user.password = await bcrypt.hash(req.body.password, 10);
-        user.firstName = req.body.firstname;
-        user.lastName = req.body.lastname;
+        // user.firstName = req.body.firstname;
+        // user.lastName = req.body.lastname;
         await user.save();
         break;
       }

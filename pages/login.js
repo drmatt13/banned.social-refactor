@@ -149,6 +149,9 @@ const AltLogin = () => {
 
   return (
     <div className="w-full animate-fade-in">
+      <div className="mb-2 text-center text-sm">
+        only github works in example
+      </div>
       <div
         onClick={() =>
           signIn("facebook", {

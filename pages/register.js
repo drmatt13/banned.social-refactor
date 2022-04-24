@@ -40,8 +40,8 @@ const Register = () => {
     }
     setLoading(true);
     const data = await service("register", {
-      firstName,
-      lastName,
+      // firstName,
+      // lastName,
       username,
       email,
       password,
@@ -70,7 +70,7 @@ const Register = () => {
             className="flex flex-col items-center w-60 p-4 bg-gray-100/75 rounded-lg animate-fade-in"
           >
             <div className="flex flex-col mt-2 w-52">
-              <input
+              {/* <input
                 className="border border-gray-400 mb-2 p-2 rounded"
                 type="text"
                 placeholder="first name"
@@ -87,7 +87,7 @@ const Register = () => {
                 onChange={(e) => setLastName(e.target.value)}
                 required={true}
                 autoComplete="family-name"
-              />
+              /> */}
               <input
                 className="border border-gray-400 mb-2 p-2 rounded"
                 type="text"

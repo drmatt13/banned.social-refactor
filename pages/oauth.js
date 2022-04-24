@@ -19,19 +19,15 @@ const Oauth = () => {
   const login = async () => {
     const data = await service("oauth");
     const { user, token, success } = data;
-    console.log(data || "no data");
     if (success) {
-      if (user && token) {
-        Cookie.set("token", data.token, {
-          expires: router.query.expires ? undefined : 3600,
-        });
-        setUser(user);
-      } else {
-        alert("login failed");
-        logout();
-      }
+      Cookie.set("token", data.token, {
+        expires: router.query.expires ? undefined : 3600,
+      });
+      setUser(user);
     } else {
-      alert("login failed");
+      if (error) {
+        alert(error);
+      }
       logout();
     }
   };
@@ -50,7 +46,6 @@ const Oauth = () => {
       session !== null &&
       ["github", "google", "facebook", "apple"].includes(router.query.provider)
     ) {
-      console.log(session);
       login();
     }
   }, [processing, setProcessing, session, router]);
