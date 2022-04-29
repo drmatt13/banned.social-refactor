@@ -11,7 +11,7 @@ import _appContext from "../context/_appContext";
 import service from "../utils/service";
 
 // styles
-import styles from "../styles/Home.module.scss";
+// import styles from "../styles/Home.module.scss";
 
 const Home = () => {
   const { user, logout } = useContext(_appContext);
