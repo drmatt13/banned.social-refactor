@@ -142,7 +142,7 @@ const Login = () => {
                 <input
                   className="custom-shadow flex-1 text-center py-1.5 sm:px-4 sm:py-3 bg-[#111] hover:bg-black text-white rounded cursor-pointer"
                   type="button"
-                  value="CREATE ACCOUNT"
+                  value="REGISTER"
                   onClick={() => router.push("/register")}
                 />
                 <div className="flex-[.1]" />
