@@ -42,11 +42,22 @@ export default async (req, res) => {
 
       // Get user
       // Unprotected
-      // returns myself or optional profile_id, returns if profile or not
+      // returns myself or optional profile_id
       // { profile_id <optional> }
       case "get user":
         req = await axios.post(
           `${process.env.URL}/api/services/user`,
+          body.data
+        );
+        break;
+
+      // get profile
+      // Unprotected
+      // returns more detailed userdata than get user such as bio, etc
+      // { profile_id <optional> }
+      case "get profile":
+        req = await axios.post(
+          `${process.env.URL}/api/services/profile`,
           body.data
         );
         break;
@@ -68,6 +79,7 @@ export default async (req, res) => {
       // { email, password, csrfToken }
       case "oauth":
         req = await axios.post(`${process.env.URL}/api/services/oauth`, {
+          provider: body.data.provider,
           sessionToken:
             cookies["next-auth.session-token"] ||
             cookies["__Secure-next-auth.session-token"],
@@ -81,6 +93,28 @@ export default async (req, res) => {
       case "register":
         req = await axios.post(
           `${process.env.URL}/api/services/register`,
+          body.data
+        );
+        break;
+
+      // Update user avatar
+      // Protected
+      // updates users avatar
+      // { avatar: NUMBER }
+      case "update avatar":
+        req = await axios.post(
+          `${process.env.URL}/api/services/avatar`,
+          body.data
+        );
+        break;
+
+      // Update username
+      // Protected
+      // updates users username
+      // { username }
+      case "update username":
+        req = await axios.post(
+          `${process.env.URL}/api/services/username`,
           body.data
         );
         break;

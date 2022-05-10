@@ -6,6 +6,14 @@ import connectDB from "../../../utils/connectDB";
 import User from "../../../models/User";
 
 export default connectDB(async (req, res) => {
+  // check for username, email and password
+  if (!req.body.username || !req.body.email || !req.body.password) {
+    return res.status(400).json({
+      success: false,
+      error: "Please fill in all fields",
+    });
+  }
+
   try {
     let user;
     // Check if user exists
@@ -21,17 +29,6 @@ export default connectDB(async (req, res) => {
           success: false,
           error: "Username already exists",
         });
-      }
-    }
-    for (let tempUser of users) {
-      if (tempUser.password === "undefined") {
-        // update user
-        user = tempUser;
-        user.password = await bcrypt.hash(req.body.password, 10);
-        // user.firstName = req.body.firstname;
-        // user.lastName = req.body.lastname;
-        await user.save();
-        break;
       }
       if (tempUser.email === req.body.email.toLowerCase()) {
         return res.status(200).json({

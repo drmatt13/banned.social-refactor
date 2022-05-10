@@ -21,6 +21,9 @@ function MyApp({ Component, pageProps }) {
 
   const { loading, user, setUser } = useCredentials();
 
+  // logging out process for ProtectedRoute component
+  const [loggingOut, setLoggingOut] = useState(false);
+
   // tailwind darkmode initial state
   const [darkMode, setDarkMode] = useState(false);
 
@@ -38,6 +41,7 @@ function MyApp({ Component, pageProps }) {
     Cookie.remove("next-auth.callback-url");
     Cookie.remove("next-auth.csrf-token");
     setUser(null);
+    setLoggingOut(true);
     signOut({ redirect: false });
     await router.push(
       `/login${
@@ -48,6 +52,7 @@ function MyApp({ Component, pageProps }) {
           : ""
       }`
     );
+    setLoggingOut(false);
   };
 
   const toggleDarkMode = () => {
@@ -117,6 +122,7 @@ function MyApp({ Component, pageProps }) {
             toggleDarkMode,
             loading,
             logout,
+            loggingOut,
             mobile,
             router,
             user,

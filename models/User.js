@@ -16,7 +16,7 @@ const Schema = new mongoose.Schema({
   },
   username: {
     type: String,
-    required: [true, "Please add a username"],
+    // required: [true, "Please add a username"],
     unique: true,
     trim: true,
     maxlength: [25, "Username can not be more then 25 characters"],
@@ -24,31 +24,41 @@ const Schema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: [true, "Please add an email"],
+    // required: [true, "Please add an email"],
     unique: true,
     trim: true,
-    maxlength: [50, "Email can not be more then 20 characters"],
+    maxlength: [255, "Email can not be more then 255 characters"],
   },
   password: {
     type: String,
-    required: [true, "Please add a password"],
+    // required: [true, "Please add a password"],
     unique: false,
     trim: true,
     maxlength: [255, "Password can not be more then 255 characters"],
     minlength: [6, "Password can not be less then 6 characters"],
     select: false,
   },
-  // profileAvatar: {
-  //   type: Number,
-  //   default: 0,
-  // },
-  // profileImage: {
-  //   type: String,
-  //   default: null,
-  // },
+  authProvider: {
+    type: String,
+    maxlength: [20, "Provider name can not be more then 20 characters"],
+    trim: true,
+  },
+  providerEmail: {
+    type: String,
+    trim: true,
+    maxlength: [255, "Email can not be more then 255 characters"],
+  },
+  profileAvatar: {
+    type: Number,
+    // default: 0,
+  },
   admin: {
     type: Boolean,
     default: false,
+  },
+  lastLogin: {
+    type: Date,
+    default: Date.now,
   },
   createdAt: {
     type: Date,
@@ -57,7 +67,9 @@ const Schema = new mongoose.Schema({
 });
 
 Schema.pre("save", function (next) {
-  this.email = this.email.toLowerCase();
+  if (this.email) {
+    this.email = this.email.toLowerCase();
+  }
   if (this.firstName) {
     this.firstName = this.firstName.toLowerCase();
   }

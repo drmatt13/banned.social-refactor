@@ -13,15 +13,15 @@ export default connectDB(async (req, res) => {
     });
     console.log(decodedSessionToken);
     // check if email exists in database
-    let user = await User.findOne({ email: decodedSessionToken.email });
+    let user = await User.findOne({ providerEmail: decodedSessionToken.email });
     if (!user) {
       // if email does not exist, create user
       user = await User.create({
-        firstName: "undefined",
-        lastName: "undefined",
-        email: decodedSessionToken.email,
-        username: decodedSessionToken.name,
-        password: "undefined",
+        // firstName: "undefined",
+        // lastName: "undefined",
+        authProvider: req.body.provider,
+        providerEmail: decodedSessionToken.email,
+        // password: "undefined",
       });
     }
     const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);

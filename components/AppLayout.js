@@ -16,7 +16,7 @@ const Layout = ({ children }) => {
         <Loading />
       ) : (
         <>
-          {user && <Navbar />}
+          {user?.username && user?.profileAvatar && <Navbar />}
           <div className="flex-1">{children}</div>
         </>
       )}

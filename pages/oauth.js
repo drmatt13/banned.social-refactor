@@ -16,18 +16,18 @@ const Oauth = () => {
   const { logout, router, user, setUser } = useContext(_appContext);
   const [processing, setProcessing] = useState(false);
 
-  const login = async () => {
-    const data = await service("oauth");
+  const login = async (provider) => {
+    const data = await service("oauth", { provider });
     const { user, token, success } = data;
     if (success) {
-      Cookie.set("token", data.token, {
+      Cookie.set("token", token, {
         expires: router.query.expires ? undefined : 3600,
       });
       setUser(user);
     } else {
-      if (error) {
-        alert(error);
-      }
+      // if (error) {
+      //   alert(error);
+      // }
       logout();
     }
   };
@@ -40,13 +40,17 @@ const Oauth = () => {
   }, [user, router]);
 
   useEffect(() => {
-    if (
-      !processing &&
-      typeof session !== "undefined" &&
-      session !== null &&
-      ["github", "google", "facebook", "apple"].includes(router.query.provider)
-    ) {
-      login();
+    if (!processing && typeof session !== "undefined") {
+      if (
+        session !== null &&
+        ["github", "google", "facebook", "apple"].includes(
+          router.query.provider
+        )
+      ) {
+        login(router.query.provider);
+      } else if (session === null) {
+        history.back();
+      }
     }
   }, [processing, setProcessing, session, router]);
 
