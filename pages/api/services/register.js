@@ -14,52 +14,37 @@ export default connectDB(async (req, res) => {
     });
   }
 
+  if (req.body._id === null) {
+    delete req.body._id;
+  }
+
   try {
-    let user;
-    // Check if user exists
-    let users = await User.find({
-      $or: [
-        { username: req.body.username },
-        { email: req.body.email.toLowerCase() },
-      ],
+    // check if user exists
+    const user = await User.findOne({
+      $or: [{ username: req.body.username }, { email: req.body.email }],
     }).select("+password");
-    for (let tempUser of users) {
-      if (tempUser.username === req.body.username) {
-        return res.status(200).json({
-          success: false,
-          error: "Username already exists",
-        });
-      }
-      if (tempUser.email === req.body.email.toLowerCase()) {
-        return res.status(200).json({
-          success: false,
-          error: "Email already exists",
-        });
-      }
+    if (user) {
+      return res.status(400).json({
+        success: false,
+        error: "User already exists",
+      });
     }
 
-    // create user if not exists
-    if (!user) {
-      req.body.password = await bcrypt.hash(req.body.password, 10);
-      user = await User.create(req.body);
-      if (!user) {
-        return res.status(400).json({
-          success: false,
-        });
-      }
-    }
-    const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
-    user = user.toObject();
-    delete user.password;
-    return res.status(200).json({
+    req.body.password = await bcrypt.hash(req.body.password, 10);
+    let newUser = await User.create(req.body);
+    const token = jwt.sign({ _id: newUser._id }, process.env.TOKEN_SECRET);
+    newUser = newUser.toObject();
+    delete newUser.password;
+    delete newUser.email;
+    delete newUser.lastLogin;
+    delete newUser.createdAt;
+    return res.json({
       success: true,
       token,
-      user,
+      user: newUser,
     });
-  } catch (err) {
-    console.error(err.message);
-    return res.status(500).json({
-      success: false,
-    });
+  } catch (error) {
+    console.log(`${error}`.bold.red);
+    res.status(200).json({ success: false });
   }
 });

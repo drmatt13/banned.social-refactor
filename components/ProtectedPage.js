@@ -4,7 +4,7 @@ import { useState, useContext, useLayoutEffect } from "react";
 import Loading from "./Loading";
 import Login from "./Login";
 import EditUsername from "./EditUsername";
-import EditAvatar from "./EditAvatar";
+import EditAvatar from "./modals/EditAvatar";
 
 // context
 import _appContext from "../context/_appContext";
@@ -15,6 +15,8 @@ const ProtectedPage = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [login, setLogin] = useState(false);
 
+  // logout();
+
   useLayoutEffect(() => {
     // FIX REROUTE
     // if (!user) logout(router.route);
@@ -23,7 +25,7 @@ const ProtectedPage = ({ children }) => {
   }, [setLoading, user, router.route, logout]);
 
   return loading || loggingOut ? (
-    <div className="h-full w-full flex justify-center items-center">
+    <div className="h-full w-full">
       <Loading />
     </div>
   ) : (
@@ -33,9 +35,19 @@ const ProtectedPage = ({ children }) => {
       ) : (
         <>
           {!user?.username ? (
-            <EditUsername />
+            <div className="h-full w-full flex justify-center items-center">
+              <EditUsername placeholder="set username" />
+            </div>
           ) : (
-            <>{!user?.profileAvatar ? <EditAvatar /> : children}</>
+            <>
+              {!user?.avatar ? (
+                <div className="h-full w-full flex justify-center items-center">
+                  <EditAvatar background={false} blur={false} />
+                </div>
+              ) : (
+                children
+              )}
+            </>
           )}
         </>
       )}

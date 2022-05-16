@@ -1,13 +1,14 @@
 import colors from "colors";
 import axios from "axios";
 import jwt from "jsonwebtoken";
-import { decode } from "next-auth/jwt";
+// import { decode } from "next-auth/jwt";
 
 export default async (req, res) => {
   const { body, cookies } = req;
 
   // verify validity of the token in the cookie and return the users _id
   let verifiedToken;
+  console.log(cookies.token);
   try {
     verifiedToken = jwt.verify(cookies.token, process.env.TOKEN_SECRET);
     body._id = verifiedToken._id;
@@ -46,8 +47,8 @@ export default async (req, res) => {
       // { profile_id <optional> }
       case "get user":
         req = await axios.post(
-          `${process.env.URL}/api/services/user`,
-          body.data
+          `${process.env.URL}/api/services/get_user`,
+          body
         );
         break;
 
@@ -57,8 +58,8 @@ export default async (req, res) => {
       // { profile_id <optional> }
       case "get profile":
         req = await axios.post(
-          `${process.env.URL}/api/services/profile`,
-          body.data
+          `${process.env.URL}/api/services/get_profile`,
+          body
         );
         break;
 
@@ -67,10 +68,7 @@ export default async (req, res) => {
       // returns jwt
       // { email, password }
       case "login":
-        req = await axios.post(
-          `${process.env.URL}/api/services/login`,
-          body.data
-        );
+        req = await axios.post(`${process.env.URL}/api/services/login`, body);
         break;
 
       // Login with Oauth
@@ -79,7 +77,7 @@ export default async (req, res) => {
       // { email, password, csrfToken }
       case "oauth":
         req = await axios.post(`${process.env.URL}/api/services/oauth`, {
-          provider: body.data.provider,
+          ...body,
           sessionToken:
             cookies["next-auth.session-token"] ||
             cookies["__Secure-next-auth.session-token"],
@@ -93,7 +91,7 @@ export default async (req, res) => {
       case "register":
         req = await axios.post(
           `${process.env.URL}/api/services/register`,
-          body.data
+          body
         );
         break;
 
@@ -102,9 +100,9 @@ export default async (req, res) => {
       // updates users avatar
       // { avatar: NUMBER }
       case "update avatar":
-        req = await axios.post(
-          `${process.env.URL}/api/services/avatar`,
-          body.data
+        req = await axios.patch(
+          `${process.env.URL}/api/services/update_avatar`,
+          body
         );
         break;
 
@@ -113,9 +111,9 @@ export default async (req, res) => {
       // updates users username
       // { username }
       case "update username":
-        req = await axios.post(
-          `${process.env.URL}/api/services/username`,
-          body.data
+        req = await axios.patch(
+          `${process.env.URL}/api/services/update_username`,
+          body
         );
         break;
 

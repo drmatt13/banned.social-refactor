@@ -48,13 +48,11 @@ const Register = () => {
       const { user, token, success, error } = data;
       console.log(data);
       if (success) {
-        Cookie.set("token", token);
+        Cookie.set("token", token, { expires: 1 });
         setUser(user);
       } else {
-        if (error) {
-          alert(error);
-          setLoading(false);
-        }
+        if (error) alert(error);
+        setLoading(false);
       }
     },
     [email, password, password2, setUser, username]

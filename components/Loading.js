@@ -1,8 +1,12 @@
+import styles from "../styles/loader.module.scss";
+
 const Loading = () => {
   return (
-    <div className="text-white h-full w-full flex justify-center items-center">
-      Loading
-    </div>
+    <>
+      <div className={styles.container}>
+        <span className={styles.spinner}></span>
+      </div>
+    </>
   );
 };
 

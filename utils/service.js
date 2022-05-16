@@ -7,7 +7,7 @@ export default async (service, data = {}) => {
       `api/eventbus`,
       {
         service,
-        data,
+        ...data,
       },
       { withCredentials: true }
     );

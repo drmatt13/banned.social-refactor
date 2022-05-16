@@ -8,7 +8,9 @@ import { SessionProvider, signOut } from "next-auth/react";
 import AppLayout from "../components/AppLayout";
 
 // custom hooks
+import useAvatars from "../hooks/useAvatars";
 import useCredentials from "../hooks/useCredentials";
+import useNotifications from "../hooks/useNotifications";
 
 // global context
 import _appContext from "../context/_appContext";
@@ -20,12 +22,12 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
   const { loading, user, setUser } = useCredentials();
+  const { avatars } = useAvatars();
+  // const { messages, updateMessages } = useMessages();
+  const { messages, notifications, updateNotifications } = useNotifications();
 
   // logging out process for ProtectedRoute component
   const [loggingOut, setLoggingOut] = useState(false);
-
-  // tailwind darkmode initial state
-  const [darkMode, setDarkMode] = useState(false);
 
   const [mobile] = useState(
     typeof window !== "undefined"
@@ -55,37 +57,7 @@ function MyApp({ Component, pageProps }) {
     setLoggingOut(false);
   };
 
-  const toggleDarkMode = () => {
-    if (
-      localStorage.theme === "dark" ||
-      (!("theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-    ) {
-      document.documentElement.classList.remove("dark");
-      localStorage.theme = "light";
-      setDarkMode(false);
-    } else {
-      document.documentElement.classList.add("dark");
-      localStorage.theme = "dark";
-      setDarkMode(true);
-    }
-  };
-
-  useEffect(() => {
-    if (
-      localStorage.theme === "dark" ||
-      (!("theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-    ) {
-      document.documentElement.classList.add("dark");
-      localStorage.theme = "dark";
-      setDarkMode(true);
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.theme = "light";
-      setDarkMode(false);
-    }
-  }, []);
+  // logout();
 
   return (
     <>
@@ -97,11 +69,11 @@ function MyApp({ Component, pageProps }) {
         />
         <link rel="apple-touch-icon" href="/icon.png" />
         {/* Android status bar color */}
-        <meta name="theme-color" content={darkMode ? "#7d54ed" : "#f33984"} />
+        {/* <meta name="theme-color" content={darkMode ? "#7d54ed" : "#f33984"} /> */}
         {/* Apple status bar color */}
         <meta
           name="apple-mobile-web-app-status-bar-style"
-          content={darkMode ? "black" : "white"}
+          // content={darkMode ? "black" : "white"}
         />
         {/* Enable Apple fullscreen */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -118,8 +90,7 @@ function MyApp({ Component, pageProps }) {
       <SessionProvider session={pageProps.session}>
         <_appContext.Provider
           value={{
-            darkMode,
-            toggleDarkMode,
+            avatars,
             loading,
             logout,
             loggingOut,

@@ -40,7 +40,8 @@ const Login = () => {
         username,
         password,
       });
-      const { user, token, success } = data;
+      const { user, token, success, error } = data;
+      console.log(data);
       if (success) {
         if (user && token) {
           Cookie.set("token", token, {
@@ -52,7 +53,7 @@ const Login = () => {
           setLoading(false);
         }
       } else {
-        alert("login failed");
+        if (error) alert(error);
         setLoading(false);
       }
     },
@@ -138,7 +139,6 @@ const Login = () => {
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           required={true}
-                          minLength={6}
                           autoComplete="current-password"
                         />
                       </div>

@@ -11,17 +11,13 @@ export default connectDB(async (req, res) => {
       token: req.body.sessionToken,
       secret: process.env.NEXTAUTH_SECRET,
     });
-    console.log(decodedSessionToken);
     // check if email exists in database
     let user = await User.findOne({ providerEmail: decodedSessionToken.email });
     if (!user) {
       // if email does not exist, create user
       user = await User.create({
-        // firstName: "undefined",
-        // lastName: "undefined",
         authProvider: req.body.provider,
         providerEmail: decodedSessionToken.email,
-        // password: "undefined",
       });
     }
     const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);

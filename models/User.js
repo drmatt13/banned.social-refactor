@@ -2,21 +2,24 @@ const mongoose = require("mongoose");
 
 // create mongoose schema object
 const Schema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    // required: [true, "Please add a first name"],
-    trim: true,
-    maxlength: [25, "First name can not be more then 25 characters"],
-  },
-  lastName: {
-    type: String,
-    // required: [true, "Please add a last name"],
-    trim: true,
-    maxlength: [25, "Last name can not be more then 25 characters"],
+  // firstName: {
+  //   type: String,
+  //   required: [true, "Please add a first name"],
+  //   trim: true,
+  //   maxlength: [25, "First name can not be more then 25 characters"],
+  // },
+  // lastName: {
+  //   type: String,
+  //   required: [true, "Please add a last name"],
+  //   trim: true,
+  //   maxlength: [25, "Last name can not be more then 25 characters"],
+  // },
+  verified: {
+    type: Boolean,
+    default: false,
   },
   username: {
     type: String,
-    // required: [true, "Please add a username"],
     unique: true,
     trim: true,
     maxlength: [25, "Username can not be more then 25 characters"],
@@ -24,14 +27,13 @@ const Schema = new mongoose.Schema({
   },
   email: {
     type: String,
-    // required: [true, "Please add an email"],
     unique: true,
     trim: true,
     maxlength: [255, "Email can not be more then 255 characters"],
+    select: false,
   },
   password: {
     type: String,
-    // required: [true, "Please add a password"],
     unique: false,
     trim: true,
     maxlength: [255, "Password can not be more then 255 characters"],
@@ -42,27 +44,38 @@ const Schema = new mongoose.Schema({
     type: String,
     maxlength: [20, "Provider name can not be more then 20 characters"],
     trim: true,
+    select: false,
   },
   providerEmail: {
     type: String,
     trim: true,
     maxlength: [255, "Email can not be more then 255 characters"],
+    select: false,
   },
-  profileAvatar: {
+  avatar: {
     type: Number,
     // default: 0,
+  },
+  bio: {
+    type: String,
+    trim: true,
+    maxlength: [255, "Bio can not be more then 255 characters"],
+    select: false,
   },
   admin: {
     type: Boolean,
     default: false,
+    select: false,
   },
   lastLogin: {
     type: Date,
     default: Date.now,
+    select: false,
   },
   createdAt: {
     type: Date,
     default: Date.now,
+    select: false,
   },
 });
 

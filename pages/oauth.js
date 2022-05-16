@@ -47,6 +47,7 @@ const Oauth = () => {
           router.query.provider
         )
       ) {
+        history.replaceState(null, null, "/");
         login(router.query.provider);
       } else if (session === null) {
         history.back();
