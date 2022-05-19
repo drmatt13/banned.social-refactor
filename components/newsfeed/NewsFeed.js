@@ -3,9 +3,18 @@ import { useState } from "react";
 // components
 import PostButton from "./PostButton";
 import Posts from "./Posts";
+import Post from "./Post";
 
-const NewsFeed = ({ format, profileId }) => {
-  const [posts, setPosts] = useState([]);
+// format = "public" || "profile" || "news"
+const NewsFeed = ({ format, profile_id }) => {
+  const [posts, setPosts] = useState([
+    // {
+    //   sender_id,
+    //   receiver_id,
+    //   post,
+    //   url
+    // }
+  ]);
 
   return (
     <>
@@ -18,13 +27,24 @@ const NewsFeed = ({ format, profileId }) => {
             </>
           )}
           {format === "news" && <div>News Header</div>}
+
           <PostButton
-            format={format}
-            profile_id={profileId}
+            profile_id={profile_id}
             posts={posts}
             setPosts={setPosts}
           />
-          <Posts posts={posts} setPosts={setPosts} />
+          {/* postbutton posts up top */}
+          {posts &&
+            posts.map((post, i) => (
+              <Post
+                key={i}
+                sender_id={post.user_id}
+                reciever_id={post.profile_id}
+                post={post.post}
+                url={post.url}
+              />
+            ))}
+          <Posts from={format} profile_id={profile_id} />
         </div>
       </div>
     </>

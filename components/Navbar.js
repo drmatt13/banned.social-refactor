@@ -11,8 +11,7 @@ import _appContext from "../context/_appContext";
 import styles from "../styles/Navbar.module.scss";
 
 const Navbar = ({ nav, buttons, setButtons, setModal, toggleModal }) => {
-  const { mobile } = useContext(_appContext),
-    // router = useRouter(),
+  const { mobile, logout } = useContext(_appContext),
     navRef = useRef(),
     parentRef = useRef(),
     childRef = useRef();
@@ -187,10 +186,7 @@ const Navbar = ({ nav, buttons, setButtons, setModal, toggleModal }) => {
                 setNotifications={setNotifications}
                 notifications={2}
               />
-              <NavButton
-                className="fas fa-gear"
-                // onClick={() => toggleModal("about")}
-              />
+              <NavButton className="fas fa-gear" onClick={logout} />
             </div>
           )}
         </div>
