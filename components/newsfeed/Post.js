@@ -1,7 +1,11 @@
-import React from "react";
+import { useEffect } from "react";
 
-const Post = () => {
-  return <div>Post</div>;
+const Post = ({ post }) => {
+  useEffect(() => {
+    console.log(post);
+  }, []);
+
+  return <div>{post.text}</div>;
 };
 
 export default Post;

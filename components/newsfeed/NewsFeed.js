@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+// utils
+import service from "../../utils/service";
 
 // components
 import PostButton from "./PostButton";
@@ -7,14 +10,9 @@ import Post from "./Post";
 
 // format = "public" || "profile" || "news"
 const NewsFeed = ({ format, profile_id }) => {
-  const [posts, setPosts] = useState([
-    // {
-    //   sender_id,
-    //   receiver_id,
-    //   post,
-    //   url
-    // }
-  ]);
+  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState([]);
+  const [users, setUsers] = useState({});
 
   return (
     <>
@@ -34,17 +32,13 @@ const NewsFeed = ({ format, profile_id }) => {
             setPosts={setPosts}
           />
           {/* postbutton posts up top */}
-          {posts &&
-            posts.map((post, i) => (
-              <Post
-                key={i}
-                sender_id={post.user_id}
-                reciever_id={post.profile_id}
-                post={post.post}
-                url={post.url}
-              />
-            ))}
-          <Posts from={format} profile_id={profile_id} />
+          {posts && posts.map((post, i) => <Post key={i} post={post} />)}
+          <Posts
+            from={format}
+            profile_id={profile_id}
+            users={users}
+            setUsers={setUsers}
+          />
         </div>
       </div>
     </>

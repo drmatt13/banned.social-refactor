@@ -8,7 +8,6 @@ export default async (req, res) => {
 
   // verify validity of the token in the cookie and return the users _id
   let verifiedToken;
-  console.log(cookies.token);
   try {
     verifiedToken = jwt.verify(cookies.token, process.env.TOKEN_SECRET);
     body._id = verifiedToken._id;
@@ -27,6 +26,15 @@ export default async (req, res) => {
     "->".bold.red,
     `${body.service}`.bold.green
   );
+
+  const protectedRoute = () => {
+    if (!body._id) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+  };
 
   try {
     switch (body.service) {
@@ -100,6 +108,7 @@ export default async (req, res) => {
       // updates users avatar
       // { avatar: NUMBER }
       case "update avatar":
+        protectedRoute();
         req = await axios.patch(
           `${process.env.URL}/api/services/update_avatar`,
           body
@@ -111,6 +120,7 @@ export default async (req, res) => {
       // updates users username
       // { username }
       case "update username":
+        protectedRoute();
         req = await axios.patch(
           `${process.env.URL}/api/services/update_username`,
           body
@@ -120,6 +130,30 @@ export default async (req, res) => {
       // *****************************
       // *******  POST DB  ***********
       // *****************************
+
+      // Get posts
+      // Protected
+      // returns posts
+      // { page, limit }
+      case "get posts":
+        protectedRoute();
+        req = await axios.post(
+          `${process.env.URL}/api/services/get_posts`,
+          body
+        );
+        break;
+
+      // Create post
+      // Protected
+      // returns post
+      // { page, limit }
+      case "create post":
+        protectedRoute();
+        req = await axios.post(
+          `${process.env.URL}/api/services/create_post`,
+          body
+        );
+        break;
 
       // *****************************
       // *******  NEWS DB  ***********
