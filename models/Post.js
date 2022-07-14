@@ -2,23 +2,21 @@ const mongoose = require("mongoose");
 
 // create mongoose schema object
 const Schema = new mongoose.Schema({
+  original_post_id: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
   user_id: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     required: [true, "Please add a user_id"],
-    trim: true,
-    length: [25, "please make sure length of userId is 25"],
   },
   profile_id: {
-    type: String,
-    required: [true, "Please add a profile_id"],
-    trim: true,
-    length: [25, "please make sure length of userId is 25"],
+    type: mongoose.Schema.Types.ObjectId,
   },
-  post: {
+  text: {
     type: String,
     trim: true,
   },
-  image: {
+  og_image: {
     type: String,
     trim: true,
   },
@@ -34,9 +32,43 @@ const Schema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  top_comment: {
+    _id: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, "Please add a comment id"],
+    },
+    user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, "Please add a user_id"],
+    },
+    text: {
+      type: String,
+      trim: true,
+    },
+    og_image: {
+      type: String,
+      trim: true,
+    },
+    likes: {
+      type: Number,
+      default: 0,
+    },
+    url: {
+      type: String,
+      trim: true,
+    },
+  },
   hashtags: {
-    type: [String],
-    default: [],
+    type: { String },
+    default: {},
+  },
+  url: {
+    type: String,
+    trim: true,
+  },
+  last_modified: {
+    type: Date,
+    default: Date.now,
   },
   createdAt: {
     type: Date,

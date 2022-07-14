@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 const Post = ({ post }) => {
   useEffect(() => {
-    console.log(post);
+    // console.log(post);
   }, []);
 
   return <div>{post.text}</div>;
