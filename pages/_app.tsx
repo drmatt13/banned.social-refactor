@@ -37,7 +37,7 @@ function MyApp({ Component, pageProps }) {
       : null
   );
 
-  const logout = async (href) => {
+  const logout = async (href: string) => {
     Cookie.remove("token");
     Cookie.remove("next-auth.session-token");
     Cookie.remove("next-auth.callback-url");
